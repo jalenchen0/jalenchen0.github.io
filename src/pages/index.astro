@@ -1,0 +1,77 @@
+---
+import Base from "../layouts/Base.astro";
+import GridLayer from "../components/GridLayer.astro";
+import Ruler from "../components/Ruler.astro";
+import ProjectGraph from "../components/ProjectGraph.astro";
+import WorkCard from "../components/WorkCard.astro";
+import PostRow from "../components/PostRow.astro";
+import Photo from "../components/Photo.astro";
+import { site } from "../site.config";
+import { getPosts, getProjects, MIN_POSTS } from "../lib/content";
+
+const projects = await getProjects();
+const cards = projects.filter((p) => p.data.card);
+// Projects joined by a dashed project-to-project edge get a dashed card glyph.
+const linked = new Set(projects.flatMap((p) => p.data.links.flatMap((l) => [p.id, l.to])));
+
+const posts = await getPosts();
+const showWriting = posts.length >= MIN_POSTS;
+---
+
+<Base>
+  <section class="hero" aria-labelledby="hero-name">
+    <GridLayer variant="hero" />
+    <div class="container cols hero-inner">
+      <div class="hero-text">
+        <h1 id="hero-name" class="hero-name bi">{site.name}</h1>
+        <p class="hero-intro bi" style="animation-delay:.15s">{site.intro}</p>
+        <div class="hero-actions bi" style="animation-delay:.25s">
+          <a class="btn btn--primary" href="#work">see the work →</a>
+          <a class="btn" href={site.github}>github ↗</a>
+        </div>
+      </div>
+      <ProjectGraph />
+    </div>
+  </section>
+
+  <section id="work" class="container section" aria-labelledby="work-title">
+    <div class="section-head">
+      <h2 id="work-title" class="h2">Work</h2>
+      <span class="links-inline muted">the nodes, in detail</span>
+    </div>
+    <Ruler />
+    <div class="cards">
+      {cards.map((p, i) => <WorkCard project={p} index={i} dashed={linked.has(p.id)} delay={0.3 + 0.08 * i} />)}
+    </div>
+  </section>
+
+  {
+    showWriting && (
+      <section id="writing" class="container section" aria-labelledby="writing-title">
+        <div class="section-head">
+          <h2 id="writing-title" class="h2">Writing</h2>
+          <span class="links-inline">
+            <a href="/rss.xml">rss ↗</a>
+            <a href="/writing/">all posts →</a>
+          </span>
+        </div>
+        <Ruler />
+        {posts.slice(0, 3).map((post) => <PostRow post={post} />)}
+      </section>
+    )
+  }
+
+  <section id="about" class="container section" aria-labelledby="about-title">
+    <Ruler />
+    <div class="cols about-inner">
+      <div class="about-side">
+        <h2 id="about-title" class="h2">About</h2>
+        <Photo />
+      </div>
+      <div class="about-main">
+        <p class="about-text">{site.about}</p>
+        {site.lookingFor && <p class="about-note">{site.lookingFor}</p>}
+      </div>
+    </div>
+  </section>
+</Base>

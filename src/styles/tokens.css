@@ -1,0 +1,43 @@
+/* design.md §2, §5, §7 */
+:root {
+  color-scheme: light dark;
+
+  --ink: #0a0a0a;
+  --paper: #ffffff;
+  --ink-rgb: 10, 10, 10;
+  --paper-rgb: 255, 255, 255;
+  --muted: #555555;
+  --divider: rgba(0, 0, 0, 0.15);
+
+  --grid-rgb: 0, 0, 0;
+  --grid-alpha: 0.075;
+
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --container: 1200px;
+  --gutter: 40px;
+
+  /* motion: subtle */
+  --b: 6px;
+  --t: -24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #ffffff;
+    --paper: #0a0a0a;
+    --ink-rgb: 255, 255, 255;
+    --paper-rgb: 10, 10, 10;
+    --muted: #a3a3a3;
+    --divider: rgba(255, 255, 255, 0.15);
+    --grid-rgb: 255, 255, 255;
+    --grid-alpha: 0.055;
+  }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --gutter: 20px;
+  }
+}

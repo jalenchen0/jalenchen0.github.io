@@ -1,0 +1,27 @@
+---
+// Shows src/assets/photo.(jpg|jpeg|png|webp) if it exists. design.md §6, Photo.
+// Export the photo already grayscale; it is never inverted in dark mode.
+import { Image } from "astro:assets";
+import { site } from "../site.config";
+
+const found = import.meta.glob<{ default: ImageMetadata }>("/src/assets/photo.{jpg,jpeg,png,webp}", { eager: true });
+const photo = Object.values(found)[0]?.default;
+const showPlaceholder = !photo && import.meta.env.DEV;
+---
+
+{
+  (photo || showPlaceholder) && (
+    <figure class="photo">
+      <span class="crop" style="left:-5px;top:-10px;z-index:1" aria-hidden="true">+</span>
+      <span class="crop" style="right:-5px;top:-10px;z-index:1" aria-hidden="true">+</span>
+      {photo ? (
+        <Image src={photo} alt={site.photoAlt} width={480} />
+      ) : (
+        <div class="photo-placeholder" role="img" aria-label="Photo placeholder, shown in dev only">
+          <span>[YOUR PHOTO]</span>
+        </div>
+      )}
+      <figcaption class="label">Fig. 03 — {site.name}</figcaption>
+    </figure>
+  )
+}

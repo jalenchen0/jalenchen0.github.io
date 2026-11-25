@@ -1,0 +1,131 @@
+/* Post and project body text. design.md §6, Post page. */
+.prose {
+  font-size: 18px;
+  line-height: 1.7;
+}
+.prose > * + * {
+  margin-top: 24px;
+}
+.prose h2 {
+  margin-top: 48px;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.prose h2 + * {
+  margin-top: 16px;
+}
+.prose h3 {
+  margin-top: 32px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.prose a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.25em;
+}
+.prose li + li {
+  margin-top: 8px;
+}
+.prose code {
+  font-family: var(--mono);
+  font-size: 16px;
+}
+.prose pre {
+  padding: 16px 20px;
+  border: 1px solid var(--ink);
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.prose pre code {
+  font-size: inherit;
+}
+.prose blockquote {
+  margin-left: 0;
+  padding-left: 20px;
+  border-left: 1px solid var(--ink);
+  color: var(--muted);
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--divider);
+}
+.prose img {
+  height: auto;
+}
+
+/* Figures sit on graph paper inside a 1px frame. */
+.prose figure {
+  position: relative;
+  margin-block: 32px 40px;
+  padding: 20px;
+  border: 1px solid var(--ink);
+}
+.prose figure::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --gc: rgba(var(--grid-rgb), var(--grid-alpha));
+  background-image: linear-gradient(var(--gc) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gc) 1px, transparent 1px),
+    linear-gradient(var(--gc) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gc) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px;
+}
+.prose figure > * {
+  position: relative;
+}
+.prose figcaption {
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* Charts drawn in posts follow the graph's rules. */
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: var(--mono);
+}
+.chart .axis,
+.chart .model,
+.chart .data {
+  fill: none;
+  stroke: var(--ink);
+}
+.chart .axis {
+  stroke-width: 1.2;
+}
+.chart .model {
+  stroke-width: 1.2;
+  stroke-dasharray: 5 5;
+}
+.chart .data {
+  stroke-width: 2;
+}
+.chart .pt {
+  fill: var(--ink);
+}
+.chart text {
+  font-size: 13px;
+  fill: var(--ink);
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+.chart text.m {
+  fill: var(--muted);
+}
