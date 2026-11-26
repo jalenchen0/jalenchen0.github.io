@@ -14,15 +14,15 @@ export const site = {
     "I’m a computer science student at Stony Brook and the founder of ubg Studio, where I design and ship Roblox games. Lately I’m building tools for strength training: measuring band tension, tracking progression.",
 
   // TODO: one line on what you're looking for, e.g. "Looking for software engineering internships for summer 2027."
-  lookingFor: "",
+  lookingFor: "Looking for software engineering internships for summer 2027.",
 
   github: "https://github.com/jalenchen0",
   // TODO: your email address. Shown as the big contact link in the footer.
-  email: "",
+  email: "Looking for software engineering internships for summer 2027.",
   // TODO: full LinkedIn URL.
-  linkedin: "",
+  linkedin: "https://www.linkedin.com/in/jalenchen2008/",
   // TODO: drop resume.pdf into /public and set this to "/resume.pdf".
-  resume: "",
+  resume: "/Jalen_Chen_Resume.pdf",
 
   // The photo is picked up automatically from src/assets/photo.(jpg|png|webp).
   photoAlt: "Jalen Chen",
