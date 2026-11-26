@@ -1,0 +1,52 @@
+---
+import { site } from "../site.config";
+import GridLayer from "./GridLayer.astro";
+
+interface Props {
+  variant?: "full" | "short";
+}
+
+const { variant = "full" } = Astro.props;
+const year = new Date().getFullYear();
+
+const links = [
+  variant === "short" ? { href: "/rss.xml", label: "subscribe via rss ↗" } : null,
+  // The full footer already uses GitHub as the big link when there's no email.
+  variant === "full" && !site.email ? null : { href: site.github, label: "github ↗" },
+  site.linkedin ? { href: site.linkedin, label: "linkedin ↗" } : null,
+  site.resume ? { href: site.resume, label: "resume.pdf ↗" } : null,
+  variant === "short" && site.email ? { href: `mailto:${site.email}`, label: site.email } : null,
+].filter((link): link is { href: string; label: string } => link !== null);
+---
+
+<footer class="site-footer" id="contact">
+  <GridLayer variant="footer" />
+  <div class:list={["container", "footer-inner", variant === "short" && "footer-inner--short"]}>
+    {
+      variant === "full" && (
+        <div class="contact-line">
+          <svg class="glyph" width="64" height="16" viewBox="0 0 64 16" aria-hidden="true">
+            <line class="ln" x1="0" y1="8" x2="56" y2="8" />
+            <circle class="fill" cx="58" cy="8" r="5" />
+          </svg>
+          {site.email ? (
+            <a class="contact-big" href={`mailto:${site.email}`}>
+              {site.email}
+            </a>
+          ) : (
+            <a class="contact-big" href={site.github}>
+              say hi on github ↗
+            </a>
+          )}
+        </div>
+      )
+    }
+    <div class="footer-links">
+      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    </div>
+    <div class="footer-bar">
+      <span>© {year} {site.name}</span>
+      <span>jalenchen.me</span>
+    </div>
+  </div>
+</footer>

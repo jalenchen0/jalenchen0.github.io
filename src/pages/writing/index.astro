@@ -1,0 +1,33 @@
+---
+import Base from "../../layouts/Base.astro";
+import Ruler from "../../components/Ruler.astro";
+import PostRow from "../../components/PostRow.astro";
+import { getPosts, tagSlug } from "../../lib/content";
+
+const posts = await getPosts();
+const counts = new Map<string, number>();
+for (const post of posts) for (const tag of post.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+---
+
+<Base title="Writing" description="Notes, guides and opinions by Jalen Chen." current="writing" footer="short">
+  <div class="container page-head">
+    <h1 class="page-title bi">Writing</h1>
+    <p class="page-dek bi" style="animation-delay:.1s">Notes, guides and opinions. Follow along with <a href="/rss.xml" style="text-decoration:underline;text-underline-offset:3px">RSS</a>.</p>
+    {
+      tags.length > 0 && (
+        <div class="chips bi" style="margin-top:24px;animation-delay:.2s">
+          {tags.map(([tag, n]) => (
+            <a class="chip" href={`/tags/${tagSlug(tag)}/`}>
+              {tag} <span class="muted">{n}</span>
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+  <section class="container section" aria-label="All posts">
+    <Ruler />
+    {posts.length > 0 ? posts.map((post) => <PostRow post={post} headingLevel={2} />) : <p class="empty">Nothing published yet.</p>}
+  </section>
+</Base>

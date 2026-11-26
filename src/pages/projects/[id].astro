@@ -1,0 +1,45 @@
+---
+// A project gets a page once its Markdown file in src/content/projects has a body.
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Ruler from "../../components/Ruler.astro";
+import Toc from "../../components/Toc.astro";
+import { getProjects, hasPage, type Project } from "../../lib/content";
+import "../../styles/prose.css";
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.filter(hasPage).map((project) => ({ params: { id: project.id }, props: { project } }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const { title, description, status, connections } = project.data;
+const { Content, headings } = await render(project);
+---
+
+<Base title={title} description={description} current="work" footer="short" type="article">
+  <article>
+    <div class="container post-head">
+      <a class="back" href="/#work">← work</a>
+      <div class="post-meta bi">
+        <span class="chip">{status}</span>
+        {connections.length > 0 && <span class="mono muted" style="font-size:13px">→ {connections.join(" · ")}</span>}
+      </div>
+      <h1 class="post-title bi" style="animation-delay:.1s">{title}</h1>
+      <p class="post-dek bi" style="animation-delay:.2s">{description}</p>
+      <Ruler />
+    </div>
+    <div class="container cols post-body">
+      <aside class="post-aside">
+        <Toc headings={headings} />
+      </aside>
+      <div class="prose post-content">
+        <Content />
+      </div>
+    </div>
+  </article>
+</Base>

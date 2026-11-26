@@ -1,0 +1,30 @@
+---
+import { site } from "../site.config";
+import { getPosts, MIN_POSTS } from "../lib/content";
+
+interface Props {
+  current?: string;
+}
+
+const { current } = Astro.props;
+const hasWriting = (await getPosts()).length >= MIN_POSTS;
+
+const items = [
+  { id: "work", href: "/#work", label: "work" },
+  ...(hasWriting ? [{ id: "writing", href: "/writing/", label: "writing" }] : []),
+  { id: "about", href: "/#about", label: "about" },
+  { id: "contact", href: "#contact", label: "contact" },
+];
+---
+
+<header class="site-header">
+  <a class="site-name" href="/">{site.name}</a>
+  <nav class="site-nav" aria-label="Main">
+    {items.map((item) => (
+      <a href={item.href} aria-current={current === item.id ? "page" : undefined}>
+        {item.label}
+      </a>
+    ))}
+    {site.resume && <a class="btn btn--primary" href={site.resume}>resume ↗</a>}
+  </nav>
+</header>

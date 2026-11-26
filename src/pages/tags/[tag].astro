@@ -1,0 +1,38 @@
+---
+import Base from "../../layouts/Base.astro";
+import Ruler from "../../components/Ruler.astro";
+import PostRow from "../../components/PostRow.astro";
+import { getPosts, tagSlug, type Post } from "../../lib/content";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  const byTag = new Map<string, { name: string; posts: Post[] }>();
+  for (const post of posts) {
+    for (const name of post.data.tags) {
+      const slug = tagSlug(name);
+      if (!byTag.has(slug)) byTag.set(slug, { name, posts: [] });
+      byTag.get(slug)!.posts.push(post);
+    }
+  }
+  return [...byTag.entries()].map(([tag, value]) => ({ params: { tag }, props: value }));
+}
+
+interface Props {
+  name: string;
+  posts: Post[];
+}
+
+const { name, posts } = Astro.props;
+---
+
+<Base title={`#${name}`} description={`Posts tagged ${name}.`} current="writing" footer="short">
+  <div class="container page-head">
+    <a class="back" href="/writing/">← writing</a>
+    <h1 class="page-title bi" style="margin-top:16px">#{name}</h1>
+    <p class="page-dek">{posts.length} {posts.length === 1 ? "post" : "posts"}</p>
+  </div>
+  <section class="container section" aria-label={`Posts tagged ${name}`}>
+    <Ruler />
+    {posts.map((post) => <PostRow post={post} headingLevel={2} />)}
+  </section>
+</Base>

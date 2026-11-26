@@ -1,0 +1,72 @@
+---
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Ruler from "../../components/Ruler.astro";
+import Toc from "../../components/Toc.astro";
+import { formatDate, getPosts, tagSlug, type Post } from "../../lib/content";
+import "../../styles/prose.css";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    // posts are newest first: "previous" is the older post
+    props: { post, previous: posts[i + 1], next: posts[i - 1] },
+  }));
+}
+
+interface Props {
+  post: Post;
+  previous?: Post;
+  next?: Post;
+}
+
+const { post, previous, next } = Astro.props;
+const { title, description, date, tags, draft } = post.data;
+const { Content, headings } = await render(post);
+---
+
+<Base title={title} description={description} current="writing" footer="short" type="article">
+  <article>
+    <div class="container post-head">
+      <a class="back" href="/writing/">← writing</a>
+      <div class="post-meta bi">
+        <time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time>
+        {draft && <span class="chip">draft</span>}
+        {tags.map((tag) => <a class="chip" href={`/tags/${tagSlug(tag)}/`}>{tag}</a>)}
+      </div>
+      <h1 class="post-title bi" style="animation-delay:.1s">{title}</h1>
+      <p class="post-dek bi" style="animation-delay:.2s">{description}</p>
+      <Ruler />
+    </div>
+    <div class="container cols post-body">
+      <aside class="post-aside">
+        <Toc headings={headings} />
+      </aside>
+      <div class="prose post-content">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  {
+    (previous || next) && (
+      <nav class="container section" aria-label="More posts">
+        <div class="pager">
+          {previous && (
+            <a class="previous" href={`/writing/${previous.id}/`}>
+              <span class="pager-label">← previous</span>
+              <span class="pager-title">{previous.data.title}</span>
+            </a>
+          )}
+          {next && (
+            <a class="next" href={`/writing/${next.id}/`}>
+              <span class="pager-label">next →</span>
+              <span class="pager-title">{next.data.title}</span>
+            </a>
+          )}
+        </div>
+      </nav>
+    )
+  }
+</Base>

@@ -1,0 +1,32 @@
+---
+import GridLayer from "./GridLayer.astro";
+import { hasPage, type Project } from "../lib/content";
+
+interface Props {
+  project: Project;
+  index: number;
+  dashed: boolean;
+  delay: number;
+}
+
+const { project, index, dashed, delay } = Astro.props;
+const { title, description, status, connections } = project.data;
+const href = hasPage(project) ? `/projects/${project.id}/` : undefined;
+const Tag = href ? "a" : "article";
+const n = String(index + 1).padStart(2, "0");
+---
+
+<Tag class="card bi" id={`project-${project.id}`} href={href} style={`animation-delay:${delay.toFixed(2)}s`}>
+  <GridLayer variant="card" />
+  <span class="card-top">
+    <svg class="glyph" width="56" height="16" viewBox="0 0 56 16" aria-hidden="true">
+      <line class="ln" x1="8" y1="8" x2="48" y2="8" stroke-dasharray={dashed ? "3 3" : undefined}></line>
+      <circle class="fill" cx="8" cy="8" r="5"></circle>
+      <circle class="hollow" cx="48" cy="8" r="4"></circle>
+    </svg>
+    <span class="label">Node {n} · {status}</span>
+  </span>
+  <h3 class="card-title"><span class="smear">{title}</span></h3>
+  <p class="card-desc">{description}</p>
+  {connections.length > 0 && <p class="card-links">→ {connections.join(" · ")}</p>}
+</Tag>

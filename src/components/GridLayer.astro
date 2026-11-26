@@ -1,0 +1,9 @@
+---
+// Decorative graph paper. The parent needs position: relative. design.md §5
+interface Props {
+  variant?: "hero" | "card" | "footer";
+}
+const { variant } = Astro.props;
+---
+
+<div class:list={["grid-layer", variant && `grid-layer--${variant}`]} aria-hidden="true"></div>
