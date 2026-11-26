@@ -18,7 +18,7 @@ export const site = {
 
   github: "https://github.com/jalenchen0",
   // TODO: your email address. Shown as the big contact link in the footer.
-  email: "Looking for software engineering internships for summer 2027.",
+  email: "jalenchen2008@gmail.com",
   // TODO: full LinkedIn URL.
   linkedin: "https://www.linkedin.com/in/jalenchen2008/",
   // TODO: drop resume.pdf into /public and set this to "/resume.pdf".
